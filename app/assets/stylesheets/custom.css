@@ -24,6 +24,7 @@ section {
 
 section h1 {
 	font-size: 200%;
+	margin-bottom: 0.9em;
 }
 
 footer {
@@ -141,4 +142,65 @@ td.sidebar {
 .profile img.gravatar {
 	border: 1px solid #999;
 	margin-bottom: -15px;
+}
+
+/******************/
+
+
+div.field, div.actions {
+	margin-bottom: 10px;
+}
+
+div.field p {
+	margin-bottom: 0;
+	padding: 0;
+}
+
+div.field input {
+	margin-top: 3px;
+	margin-bottom: 5px;
+}
+
+
+
+.field_with_errors {
+	margin-top: 10px;
+	padding: 2px;
+	background-color: red;
+	display: table;
+}
+
+.field_with_errors label {
+	color: #fff;
+}
+
+#error_explanation {
+	width: 400px;
+	border: 2px solid red;
+	padding: 7px;
+	padding-bottom: 12px;
+	margin-bottom: 20px;
+	background-color: #f0f0f0;
+}
+
+#error_explanation h2 {
+	text-align: left;
+	font-weight: bold;
+	padding: 5px 5px 5px 15px;
+	font-size: 12px;
+	margin: -7px;
+	background-color: #c00;
+	color: #fff;
+}
+
+#error_explanation p {
+	padding: 5px;
+	margin-top: 15px;
+	margin-bottom: 0;
+	color: #333;
+}
+
+#error_explanation ul li {
+	font-size: 12px;
+	list-style: square;	
 }
