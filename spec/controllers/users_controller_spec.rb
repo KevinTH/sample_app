@@ -45,6 +45,27 @@ describe UsersController do
       get :new
       response.should have_selector("title", content: "Sign up")
     end
+
+
+    it "has a name field" do
+      get :new
+      response.should have_selector("input[name='user[name]'][type='text']")
+    end
+
+    it "has a email field" do
+      get :new
+      response.should have_selector("input[name='user[email]'][type='text']")
+    end
+
+    it "has a password field" do
+      get :new
+      response.should have_selector("input[name='user[password]'][type='password']")
+    end
+
+    it "has a password confirmation field" do
+      get :new
+      response.should have_selector("input[name='user[password_confirmation]'][type='password']")
+    end
   end
 
 
@@ -94,6 +115,11 @@ describe UsersController do
       it "has a welcome message" do
         post :create, user: @attr
         flash[:success].should =~ /welcome to the sample app/i
+      end
+
+      it "signs the user in" do
+        post :create, user: @attr
+        controller.should be_signed_in
       end
     end
 

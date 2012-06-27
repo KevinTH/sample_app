@@ -148,6 +148,18 @@ describe User do
     end
 
   end
+
+
+  describe "remember_token" do
+    before do
+      @user = User.new(@attr)
+      @user.save
+    end
+
+    it "has a remember token" do
+      @user.remember_token.should_not be_blank
+    end
+  end
   
 end
 

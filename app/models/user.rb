@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation
 
   before_save { |user| user.email = email.downcase }
-  before_save :encrypt_password
+  before_save :encrypt_password # symbol instead of just the method because before_save is function call
+  before_save :create_remember_token
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
@@ -40,6 +41,11 @@ class User < ActiveRecord::Base
     return user if user.has_password?(submitted_password)
   end
 
+  def self.authenticate_with_salt(id, cookie_salt)
+    user = find_by_id(id)
+    (user && user.salt == cookie.salt) ? user : nil
+  end
+
 
   private
 
@@ -58,6 +64,10 @@ class User < ActiveRecord::Base
 
     def secure_hash(string)
       Digest::SHA2.hexdigest(string)
+    end
+
+    def create_remember_token
+      self.remember_token = SecureRandom.urlsafe_base64 if new_record?
     end
     
 end
