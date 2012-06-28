@@ -52,11 +52,7 @@ describe "Users" do
     describe "success" do
       it "signs a user in" do
         @user = FactoryGirl.create(:user)
-        visit root_path
-        click_link "Sign in"
-        fill_in "Email", with: @user.email
-        fill_in "Password", with: @user.password
-        click_button
+        integration_sign_in(@user)
         controller.should be_signed_in
         click_link "Sign out"
         controller.should_not be_signed_in
