@@ -47,6 +47,8 @@ GEM
     factory_girl_rails (3.3.0)
       factory_girl (~> 3.3.0)
       railties (>= 3.0.0)
+    faker (1.0.1)
+      i18n (~> 0.4)
     gravatar_image_tag (1.1.2)
     hike (1.2.1)
     i18n (0.6.0)
@@ -126,6 +128,7 @@ GEM
       nokogiri (>= 1.2.0)
       rack (>= 1.0)
       rack-test (>= 0.5.3)
+    will_paginate (3.0.3)
 
 PLATFORMS
   ruby
@@ -134,6 +137,7 @@ DEPENDENCIES
   annotate (~> 2.4.1.beta)
   coffee-rails (~> 3.2.1)
   factory_girl_rails
+  faker
   gravatar_image_tag
   jquery-rails
   pg
@@ -145,3 +149,4 @@ DEPENDENCIES
   sqlite3
   uglifier (>= 1.0.3)
   webrat
+  will_paginate

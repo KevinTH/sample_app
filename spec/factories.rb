@@ -1,8 +1,8 @@
 # By using ':user', we get Factory Girl to simulate User model
 FactoryGirl.define do
   factory :user do
-    name                   "Kay Tee"
-    email                  "kaytee@example.com"
+    sequence(:name)         {|n| "Person #{n}" }
+    sequence(:email)        {|n| "person_#{n}@example.com"}  
     password               "foobar"
     password_confirmation  "foobar"
   end
