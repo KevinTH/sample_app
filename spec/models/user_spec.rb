@@ -2,11 +2,15 @@
 #
 # Table name: users
 #
-#  id         :integer         not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime        not null
-#  updated_at :datetime        not null
+#  id                 :integer         not null, primary key
+#  name               :string(255)
+#  email              :string(255)
+#  created_at         :datetime        not null
+#  updated_at         :datetime        not null
+#  encrypted_password :string(255)
+#  salt               :string(255)
+#  remember_token     :string(255)
+#  admin              :boolean         default(FALSE)
 #
 
 require 'spec_helper'
@@ -27,7 +31,6 @@ describe User do
   it "creates a new instance given valid attributes" do
     User.create!(@attr)
   end
-
 
   it "requires a name" do
     no_name_user = User.new(@attr.merge(name: ""))
@@ -179,6 +182,48 @@ describe User do
     it "is convertible to an admin" do
       @user.toggle!(:admin)
       @user.should be_admin
+    end
+  end
+
+
+
+  describe "micropost associations" do
+    before(:each) do
+      @user = User.create(@attr)
+      @mp1 = FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+      @mp2 = FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)
+    end
+
+    it "has a microposts attribute" do
+      @user.should respond_to(:microposts)
+    end
+
+    it "has the right microposts in the right order" do
+      @user.microposts.should == [@mp2, @mp1]
+    end
+
+    it "destroys associated microposts upon deletion" do
+      @user.destroy
+      [@mp1, @mp2].each do |micropost|
+        Micropost.find_by_id(micropost.id).should be_nil
+      end
+    end
+
+
+    describe "status feed" do
+      it "has a feed" do
+        @user.should respond_to(:feed)
+      end
+
+      it "includes the user's microposts" do
+        @user.feed.include?(@mp1).should be_true
+        @user.feed.include?(@mp2).should be_true
+      end
+
+      it "does not include a different user's microposts" do
+        @mp2 = FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
+        @user.feed.include?(@mp3).should be_false
+      end
     end
   end
   

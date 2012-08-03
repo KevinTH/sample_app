@@ -2,25 +2,31 @@
 #
 # Table name: users
 #
-#  id         :integer         not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime        not null
-#  updated_at :datetime        not null
+#  id                 :integer         not null, primary key
+#  name               :string(255)
+#  email              :string(255)
+#  created_at         :datetime        not null
+#  updated_at         :datetime        not null
+#  encrypted_password :string(255)
+#  salt               :string(255)
+#  remember_token     :string(255)
+#  admin              :boolean         default(FALSE)
 #
+
 require 'digest'
 class User < ActiveRecord::Base
   attr_accessor :password
   attr_accessible :name, :email, :password, :password_confirmation
 
+  has_many :microposts, dependent: :destroy
+
   before_save { |user| user.email = email.downcase }
-  before_save :encrypt_password # symbol instead of just the method because before_save is function call
+  before_save :encrypt_password # Uebergeben des methodenNAMENS "encrypt_password"
   before_save :create_remember_token
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-  validates :name, presence: true,
-                   length:   { maximum: 50 }
+  validates :name, presence: true, length:   { maximum: 50 }
   validates :email, presence: true,
                     format: { with: email_regex },
                     uniqueness: { case_sensitive: false }
