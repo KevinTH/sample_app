@@ -13,3 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+function remainingCharacters() {
+	var charactersWritten = document.getElementById("micropost_content").value.length;
+	document.getElementById("remaining_characters").innerHTML = 140 - charactersWritten;
+}
+

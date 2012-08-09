@@ -57,6 +57,49 @@ describe PagesController do
       response.should have_selector("title", :content => @base_title + " | Help")
     end
   end
+
+
+
+  describe "sidebar micropost count" do
+
+    describe "absence" do
+      it "does not display a micropost count to not signed in users" do
+        get 'home'
+        response.should_not have_selector("span", class: "microposts")
+      end
+    end
+
+    describe "showing and pluralization" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        test_sign_in(@user)
+      end
+
+      it "displays a micropost count" do
+        get 'home'
+        response.should have_selector("span", class: "microposts")
+      end
+
+      it "has the correct plural for no microposts" do
+        get 'home'
+        response.should have_selector("span", class: "microposts", content: "0 microposts")
+      end
+
+      it "has the correct plural for one microposts" do
+        FactoryGirl.create(:micropost, user: @user)
+        get 'home'
+        response.should have_selector("span", class: "microposts", content: "1 micropost")
+        response.should_not have_selector("span", class: "microposts", content: "microposts")
+      end
+
+      it "has the correct plural for more than one microposts" do
+        FactoryGirl.create(:micropost, user: @user)
+        FactoryGirl.create(:micropost, user: @user)
+        get 'home'
+        response.should have_selector("span", class: "microposts", content: "2 microposts")
+      end
+    end
+  end
   	
 
 end
