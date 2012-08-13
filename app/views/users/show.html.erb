@@ -7,9 +7,9 @@
       </h1>
 
       <% unless @user.microposts.empty? %>
-        <table class="microposts" summary="User microposts">
+        <ol class="microposts userfeed">
           <%= render @microposts %>
-        </table>
+        </ol>
         <%= will_paginate @microposts %>
       <% end %>
     </td>
