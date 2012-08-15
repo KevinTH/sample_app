@@ -41,6 +41,39 @@ describe UsersController do
       response.should have_selector("span.content", content: mp1.content)
       response.should have_selector("span.content", content: mp2.content)
     end
+
+    it "paginates microposts" do
+      microposts = []
+      31.times do
+        microposts << FactoryGirl.create(:micropost, user: @user)
+      end
+      get :show, id: @user
+      response.should have_selector("div.pagination")
+      response.should have_selector("span.disabled", content: "Previous")
+      response.should have_selector("a", href: "#{user_path(@user)}?page=2", content: "2")
+      response.should have_selector("a", href: "#{user_path(@user)}?page=2", content: "Next")
+    end
+
+
+    describe "regarding micropost deletion" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        @wrong_user = FactoryGirl.create(:user)
+        @mp = FactoryGirl.create(:micropost, user: @user)
+      end
+      
+      it "shows delete links to the micropost creator" do
+        test_sign_in(@user)
+        get :show, id: @user
+        response.should have_selector("a[data-method='delete']", content: "delete")
+      end
+
+      it "does NOT show delete links to the micropost creator" do
+        test_sign_in(@wrong_user)
+        get :show, id: @user
+        response.should_not have_selector("a[data-method='delete']", content: "delete")
+      end
+    end
   end
   
 

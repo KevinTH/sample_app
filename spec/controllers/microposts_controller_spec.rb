@@ -92,5 +92,47 @@ describe MicropostsController do
       end
     end
   end
+
+
+
+  describe "GET 'index'" do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+    end
+
+    it "returns http success" do
+      get :index, user_id: @user
+      response.should be_success
+    end
+
+    it "finds the right user" do
+      get :index, user_id: @user
+      assigns(:user).should == @user
+    end
+
+    it "has the right title" do
+      get :index, user_id: @user
+      response.should have_selector("title", content: @user.name)
+    end
+
+    it "includes the user's name" do
+      get :index, user_id: @user
+      response.should have_selector("h1", content: @user.name)
+    end
+
+    it "has a profile image" do
+      get :index, user_id: @user
+      response.should have_selector("h1>img", class: "gravatar")
+    end
+
+
+    it "shows the user's microposts" do
+      mp1 = FactoryGirl.create(:micropost, user: @user, content: "Foo bar")
+      mp2 = FactoryGirl.create(:micropost, user: @user, content: "Baz quux")
+      get :index, user_id: @user
+      response.should have_selector("span.content", content: mp1.content)
+      response.should have_selector("span.content", content: mp2.content)
+    end
+  end
         
 end

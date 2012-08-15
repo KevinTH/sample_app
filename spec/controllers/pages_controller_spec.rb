@@ -17,6 +17,21 @@ describe PagesController do
     	get 'home'
     	response.should have_selector("title", :content => @base_title + " | Home")
     end
+
+    it "paginates the micropost feed" do
+      user = FactoryGirl.create(:user)
+      test_sign_in(user)
+      
+      microposts = []
+      31.times do
+        microposts << FactoryGirl.create(:micropost, user: user)
+      end
+      get :home, id: @user
+      response.should have_selector("div.pagination")
+      response.should have_selector("span.disabled", content: "Previous")
+      response.should have_selector("a", href: "/?page=2", content: "2")
+      response.should have_selector("a", href: "/?page=2", content: "Next")
+    end
   end
 
 
